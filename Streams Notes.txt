@@ -1,0 +1,280 @@
+STREAMS POINTS TO REMEMBER:
+Got it! Let’s dive deeper into **each concept** with the **methods** you should know, and which are most relevant for your **WECP assessment**. I'll highlight the **methods** and their specific usage, as well as **related concepts** you should focus on.
+
+---
+
+## 1️⃣ **Data Conversion**
+
+**Core Concept**: Data conversion involves transforming one data type into another (like converting a `String` to `Integer` or mapping collections).
+
+### **Methods to Know**:
+
+* **`map()`**:
+
+  * **Use**: Transforms each element in a stream.
+  * Example: Convert a `List<String>` to `List<Integer>`.
+
+  ```java
+  List<Integer> numbers = stringList.stream()
+                                    .map(Integer::parseInt)
+                                    .collect(Collectors.toList());
+  ```
+
+* **`mapToInt()`**, **`mapToDouble()`**, **`mapToLong()`**:
+
+  * **Use**: Convert elements to primitive types (`int`, `double`, `long`).
+  * Example:
+
+  ```java
+  int sum = products.stream()
+                    .mapToInt(Product::getPrice)
+                    .sum();
+  ```
+
+* **`collect()`**:
+
+  * **Use**: Collect stream elements into a collection (e.g., List, Set).
+  * Example:
+
+  ```java
+  List<Integer> intList = stringList.stream()
+                                    .map(Integer::parseInt)
+                                    .collect(Collectors.toList());
+  ```
+
+### **Key Concepts to Understand**:
+
+* **`Function`** Interface: `map()` works with any functional interface, particularly `Function<T, R>`.
+* **Primitive types**: Using `mapToInt()`, `mapToDouble()`, etc., allows efficient conversions to primitive types.
+
+### **Additional Focus**:
+
+* Understand how **null values** are handled in conversion (`Optional` might be used).
+* **Exception handling**: For invalid conversions like parsing incorrect strings to numbers.
+
+---
+
+## 2️⃣ **Filtering**
+
+**Core Concept**: Filtering is the process of selecting elements from a collection that satisfy a given condition.
+
+### **Methods to Know**:
+
+* **`filter()`**:
+
+  * **Use**: Retains elements that match a given predicate (condition).
+  * Example:
+
+  ```java
+  List<Product> expensiveProducts = products.stream()
+                                            .filter(p -> p.getPrice() > 1000)
+                                            .collect(Collectors.toList());
+  ```
+
+* **`distinct()`**:
+
+  * **Use**: Removes duplicates from the stream.
+  * Example:
+
+  ```java
+  List<Product> uniqueProducts = products.stream()
+                                         .distinct()
+                                         .collect(Collectors.toList());
+  ```
+
+* **`limit()`** and **`skip()`**:
+
+  * **Use**: Limits the number of elements or skips a number of elements.
+  * Example:
+
+  ```java
+  List<Product> limitedProducts = products.stream()
+                                          .limit(5) // First 5 elements
+                                          .collect(Collectors.toList());
+  ```
+
+* **`takeWhile()`** (Java 9+):
+
+  * **Use**: Filters elements as long as they match the condition.
+  * Example:
+
+  ```java
+  List<Product> affordableProducts = products.stream()
+                                             .takeWhile(p -> p.getPrice() < 1000)
+                                             .collect(Collectors.toList());
+  ```
+
+### **Key Concepts to Understand**:
+
+* **Predicate**: A `Predicate<T>` is a functional interface that returns a boolean value. The `filter()` method takes a predicate.
+* **Short-circuiting operations**: Methods like `findFirst()`, `anyMatch()`, `allMatch()` work with conditions.
+
+### **Additional Focus**:
+
+* **Handling null values** in filtering.
+* **Combination of filters**: You can combine multiple filters in a chain (e.g., `filter(p -> p.getPrice() > 1000).filter(p -> p.getCategory().equals("Electronics"))`).
+
+---
+
+## 3️⃣ **Function Overloading**
+
+**Core Concept**: Function overloading allows creating multiple methods with the **same name** but **different parameter types** or **number of parameters**.
+
+### **Methods to Know**:
+
+* **`addProduct()` (overloaded methods)**:
+
+  * **Use**: Methods can perform similar operations but take **different input types** or **parameter counts**.
+
+  ```java
+  class ProductService {
+      void addProduct(Product p) { } // By product object
+      void addProduct(String name, double price) { } // By name & price
+      void addProduct(int id, String name) { } // By id & name
+  }
+  ```
+
+* **Important Focus**:
+
+  * **Overloading is determined by parameter types and count**, not return type.
+  * **Static vs Instance Overloading**: Both instance and static methods can be overloaded.
+
+### **Key Concepts to Understand**:
+
+* **Why use overloading?**: Flexibility and the ability to reuse method names for similar functionality.
+* **Method Resolution**: The JVM picks the appropriate overloaded method based on the provided arguments.
+
+---
+
+## 4️⃣ **Product Operations (CRUD-like operations)**
+
+**Core Concept**: CRUD (Create, Read, Update, Delete) operations are the foundational data management tasks that can be performed using Java collections and streams.
+
+### **Methods to Know**:
+
+* **`map()`**:
+
+  * **Use**: Convert each element (e.g., extracting or transforming fields).
+  * Example: Extracting product names from a list of products.
+
+  ```java
+  List<String> productNames = products.stream()
+                                      .map(Product::getName)
+                                      .collect(Collectors.toList());
+  ```
+
+* **`forEach()`**:
+
+  * **Use**: Performs an action for each element.
+  * Example:
+
+  ```java
+  products.stream().forEach(product -> System.out.println(product.getName()));
+  ```
+
+* **`reduce()`**:
+
+  * **Use**: Aggregate (combine) elements into a single result (e.g., sum, average).
+  * Example:
+
+  ```java
+  double totalPrice = products.stream()
+                              .map(Product::getPrice)
+                              .reduce(0.0, Double::sum);
+  ```
+
+* **`collect()`**:
+
+  * **Use**: Collects stream elements into a container (e.g., List, Set).
+  * Example:
+
+  ```java
+  List<Product> productList = products.stream()
+                                      .filter(p -> p.getPrice() > 1000)
+                                      .collect(Collectors.toList());
+  ```
+
+### **Key Concepts to Understand**:
+
+* **Aggregation operations**: Using `reduce()` to combine values (e.g., summing prices).
+* **Side-effect operations**: Using `forEach()` to apply an action without changing the data.
+
+---
+
+## 5️⃣ **Sorting**
+
+**Core Concept**: Sorting refers to arranging data in a specific order, either ascending or descending.
+
+### **Methods to Know**:
+
+* **`sorted()`**:
+
+  * **Use**: Sorts elements in ascending order.
+  * Example:
+
+  ```java
+  List<Product> sortedProducts = products.stream()
+                                         .sorted(Comparator.comparing(Product::getPrice))
+                                         .collect(Collectors.toList());
+  ```
+
+* **`sorted(Comparator)`**:
+
+  * **Use**: Custom sorting with a comparator.
+  * Example:
+
+  ```java
+  List<Product> sortedByName = products.stream()
+                                       .sorted(Comparator.comparing(Product::getName))
+                                       .collect(Collectors.toList());
+  ```
+
+* **`reversed()`**:
+
+  * **Use**: Sort in descending order.
+  * Example:
+
+  ```java
+  List<Product> sortedDescending = products.stream()
+                                            .sorted(Comparator.comparing(Product::getPrice).reversed())
+                                            .collect(Collectors.toList());
+  ```
+
+* **`thenComparing()`**:
+
+  * **Use**: Sorting by multiple fields (e.g., first by price, then by name).
+  * Example:
+
+  ```java
+  List<Product> multiSort = products.stream()
+                                    .sorted(Comparator.comparing(Product::getPrice)
+                                                      .thenComparing(Product::getName))
+                                    .collect(Collectors.toList());
+  ```
+
+### **Key Concepts to Understand**:
+
+* **Comparators**: `Comparator.comparing()` allows sorting by one or more properties.
+* **Performance of sorting**: Sorting is a **terminal operation** and can impact performance in large datasets.
+
+---
+
+## 💡 **Summary of Methods to Know**:
+
+### **Stream Methods**:
+
+* **Data Conversion**: `map()`, `mapToInt()`, `collect()`
+* **Filtering**: `filter()`, `distinct()`, `limit()`, `takeWhile()`
+* **Overloading**: Understand overloading methods, though streams don't directly use overloading.
+* **CRUD Operations**: `map()`, `forEach()`, `reduce()`, `collect()`
+* **Sorting**: `sorted()`, `reversed()`, `thenComparing()`
+
+### **Exam Tips**:
+
+1. Practice chaining stream methods together.
+2. Remember **how to handle null values** (especially in filtering or mapping).
+3. Be aware of **performance considerations** when using operations like `sorted()` or `reduce()` on large datasets.
+4. Understand **primitive specialization methods** like `mapToInt()`, `mapToDouble()` for efficient type handling.
+5. **Edge case handling**: Learn how streams handle **empty lists**, **null values**, and **duplicates**.
+
+Let me know if you'd like a specific example for any method or need more practice exercises!
