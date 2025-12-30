@@ -1,0 +1,40 @@
+HASHTAGS:
+1)Class Design
+Database Interactions
+Dependency Injection
+Refactoring
+Single Responsibility Principle
+System Design
+------------------------------
+2)Core Java
+Data Conversion
+Filtering
+Function Overloading
+Product Operations
+Sorting
+------------------------------
+3)Controller Endpoints
+Entity Design
+Repository Implementation
+Service Methods
+Spring Boot
+-----------------------------
+4)Annotations
+Controller Development
+Model Implementation
+REST API
+Service Implementation
+Spring Boot
+Testing
+---------------------------------
+5)Entity Relationships
+RESTful Endpoints
+Role-Based Access Control
+Spring Boot
+Spring Security
+--------------------------------
+6)Entity Design
+RESTful Endpoints
+Role-Based Access Control
+Security Implementation
+Spring Boot.
