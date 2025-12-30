@@ -1,0 +1,101 @@
+package com.example.corejava;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
+public class InventoryManager {
+	
+	private List<Product> inventory=new ArrayList<>();
+	
+	public void addProduct(Product product) {
+		inventory.add(product);
+	}
+	
+	public void removeProduct(String id) {
+		 inventory.removeIf(product->product.getId().equals(id));
+	}
+	
+	public void updateProduct(String id,double price) {
+		for(Product p:inventory) {
+			if(p.getId().equals(id)) {
+				p.setPrice(price);
+				break;
+			}
+		}
+	}
+	
+	public List<Product> cstToList(String csvData) {
+		List<Product> prod=new ArrayList<>();
+		String[] rows=csvData.split("\n");
+		for(String row:rows) {
+			String[] column=row.split(",");
+			String id=column[0];
+			String name=column[1];
+			String category=column[2];
+			double price=Double.parseDouble(column[3]);
+			int inventory=Integer.parseInt(column[4]);
+			prod.add(new Product(id,name,category,price,inventory));
+		}
+		return prod;
+	}
+	
+	public String ListToCsv(List<Product> products) {
+		StringBuilder csvFile=new StringBuilder();
+		for(Product prod:products) {
+			csvFile.append(prod.getId()).append(",")
+			.append(prod.getName()).append(",")
+			.append(prod.getCategory()).append(",")
+			.append(prod.getPrice()).append(",")
+			.append(prod.getInventory()).append("\n");
+		}
+		return csvFile.toString();
+	}
+	
+	
+	public List<Product> filterByPrice(double minPrice,double maxPrice){
+		return inventory.stream()
+				.filter(i->i.getPrice()>=minPrice && i.getPrice()<maxPrice)
+				.collect(Collectors.toList());
+	}
+	
+	public List<Product> filterByCategory(String category){
+		return inventory.stream()
+				.filter(i->i.getCategory().equals(category))
+				.collect(Collectors.toList());
+	}
+	
+	public double calculateDiscount(Product p,double percent) {
+		return p.getPrice()*(1- (percent/100));
+	}
+	
+	public double calculateDiscount(Product p,double amount,String discountReason) {
+		System.out.println("Discount Reasong: "+discountReason);
+		return p.getPrice()-amount;
+	}
+	
+	public List<Product> sortByPrice(){
+		return inventory.stream()
+				.sorted(Comparator.comparingDouble(Product::getPrice))
+				.collect(Collectors.toList());
+	}
+	
+	public List<Product> sortByName(){
+		return inventory.stream()
+				.sorted(Comparator.comparing(Product::getName))
+				.collect(Collectors.toList());
+	}
+	
+	public List<Product> sortByCategory(){
+		return inventory.stream()
+				.sorted(Comparator.comparing(Product::getCategory))
+				.collect(Collectors.toList());
+	}
+	
+	public void displayProducts(List<Product> products) {
+        for (Product product : products) {
+            System.out.println(product);
+        }
+    }
+}
